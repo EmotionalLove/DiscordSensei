@@ -107,7 +107,10 @@ public class ActivityInterpreter {
             case INTRP_QUIZQUESTION:
                 if (line.trim().equals(KEYWORD_QUESTION_END)) {
                     if (!((QuizActivity) activity).isPopulated()) {
-
+                        throw new EmptyQuestionException("Question has no answers!");
+                    }
+                    if (!((QuizActivity) activity).isPossible()) {
+                        throw new ImpossibleQuestionException("Question has impossible responses!");
                     }
                     mode = Mode.NORMAL;
                     ((QuizActivity) activity).multipleChoiceQuestions.add(tmpQuestion);
@@ -141,6 +144,11 @@ class ErroredInterpreterException extends ActivityInterpreterException {
 
 class EmptyQuestionException extends ActivityInterpreterException {
     public EmptyQuestionException(String s) {
+        super(s);
+    }
+}
+class ImpossibleQuestionException extends ActivityInterpreterException {
+    public ImpossibleQuestionException(String s) {
         super(s);
     }
 }

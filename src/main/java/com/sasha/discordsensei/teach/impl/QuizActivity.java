@@ -1,6 +1,7 @@
 package com.sasha.discordsensei.teach.impl;
 
         import com.sasha.discordsensei.teach.TeacherActivity;
+        import com.sasha.discordsensei.teach.impl.util.MultipleChoiceAnswer;
         import com.sasha.discordsensei.teach.impl.util.MultipleChoiceQuestion;
         import com.sasha.discordsensei.teach.impl.util.ShortResponseQuestion;
 
@@ -22,6 +23,17 @@ public class QuizActivity extends TeacherActivity {
 
     public boolean isPopulated() {
         return !multipleChoiceQuestions.isEmpty() || !shortResponseQuestions.isEmpty();
+    }
+
+    public boolean isPossible() {
+        int have = 0;
+        int needed = multipleChoiceQuestions.size();
+        for (MultipleChoiceQuestion multipleChoiceQuestion : multipleChoiceQuestions) {
+            for (MultipleChoiceAnswer respons : multipleChoiceQuestion.getResponses()) {
+                if (respons.isCorrect()) have++;
+            }
+        }
+        return have >= needed;
     }
 
 }

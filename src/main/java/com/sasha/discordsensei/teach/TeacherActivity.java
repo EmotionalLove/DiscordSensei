@@ -21,4 +21,8 @@ public abstract class TeacherActivity {
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
+
+    public String getActivityName() {
+        return activityName;
+    }
 }

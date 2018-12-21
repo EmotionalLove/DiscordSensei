@@ -1,6 +1,8 @@
-package com.sasha.discordsensei.teach;
+package com.sasha.discordsensei.interpreter;
 
 import com.sasha.discordsensei.Constants;
+import com.sasha.discordsensei.teach.TeacherActivity;
+import com.sasha.discordsensei.teach.TeacherActivityContainer;
 import com.sasha.discordsensei.teach.impl.LessonActivity;
 
 import static com.sasha.discordsensei.Constants.KEYWORD_FILETYPE;
@@ -22,15 +24,13 @@ public class ActivityInterpreter {
             String line = fileLines[i];
             if (i == 0 && !line.startsWith(KEYWORD_FILETYPE)) {
                 throw new FileTypeNotDeclaredException("\"FILETYPE\" must be declared at the top of the document!");
-            }
-            else if (i == 0) {
+            } else if (i == 0) {
                 String fileType = line.replace(KEYWORD_FILETYPE, "").replace(" ", "").toUpperCase();
                 try {
                     type = Type.valueOf(fileType);
                     mode = Mode.NORMAL;
                     continue;
-                }
-                catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException ex) {
                     throw new FileTypeNotDeclaredException("Invalid FileType declared: " + fileType);
                 }
             }
@@ -43,6 +43,7 @@ public class ActivityInterpreter {
                     break;
             }
         }
+        container.addElement(activity);
     }
 
     private void continueInterpretingLesson(String line) {
@@ -53,11 +54,11 @@ public class ActivityInterpreter {
                     return;
                 }
                 if (line.startsWith(Constants.KEYWORD_OBJECTIVE)) {
-                ((LessonActivity) activity).objective = line.replace(Constants.KEYWORD_OBJECTIVE, "");
+                    ((LessonActivity) activity).objective = line.replace(Constants.KEYWORD_OBJECTIVE, "");
                     return;
                 }
                 if (line.startsWith(Constants.KEYWORD_REC_GOTO)) {
-                ((LessonActivity) activity).gotoNxt = line.replace(Constants.KEYWORD_REC_GOTO, "");
+                    ((LessonActivity) activity).gotoNxt = line.replace(Constants.KEYWORD_REC_GOTO, "");
                     return;
                 }
                 if (line.trim().equals("LESSON START")) {
@@ -70,27 +71,33 @@ public class ActivityInterpreter {
                     mode = Mode.NORMAL;
                     return;
                 }
-
+                if (line.startsWith(">")) {
+                    ((LessonActivity) activity).sections.add(line.replaceFirst(">", ""));
+                }
         }
     }
 
 }
+
 class ActivityInterpreterException extends Error {
     public ActivityInterpreterException(String s) {
         super(s);
     }
 }
+
 class ErroredInterpreterException extends ActivityInterpreterException {
 
     public ErroredInterpreterException(String s) {
         super(s);
     }
 }
+
 class FileTypeNotDeclaredException extends ActivityInterpreterException {
     public FileTypeNotDeclaredException(String s) {
         super(s);
     }
 }
+
 enum Type {
     ASSESSMENT, QUIZ, LESSON
 }

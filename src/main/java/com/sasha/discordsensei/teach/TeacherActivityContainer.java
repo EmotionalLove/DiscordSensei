@@ -11,6 +11,10 @@ public class TeacherActivityContainer {
     private String author;
     private ArrayList<TeacherActivity> elements;
 
+    public void addElement(TeacherActivity element) {
+        this.elements.add(element);
+    }
+
     // get lesson
     // get quiz
     // get assessment

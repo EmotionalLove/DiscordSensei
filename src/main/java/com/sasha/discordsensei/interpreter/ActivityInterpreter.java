@@ -4,8 +4,11 @@ import com.sasha.discordsensei.Constants;
 import com.sasha.discordsensei.teach.TeacherActivity;
 import com.sasha.discordsensei.teach.TeacherActivityContainer;
 import com.sasha.discordsensei.teach.impl.LessonActivity;
+import com.sasha.discordsensei.teach.impl.QuizActivity;
+import com.sasha.discordsensei.teach.impl.util.MultipleChoiceAnswer;
+import com.sasha.discordsensei.teach.impl.util.MultipleChoiceQuestion;
 
-import static com.sasha.discordsensei.Constants.KEYWORD_FILETYPE;
+import static com.sasha.discordsensei.Constants.*;
 
 /**
  * Created by Sasha at 1:07 PM on 12/21/2018
@@ -16,6 +19,8 @@ public class ActivityInterpreter {
     private String[] fileLines;
     private TeacherActivityContainer container;
     private TeacherActivity activity = null;
+
+    private MultipleChoiceQuestion tmpQuestion = null;
 
     public void interpret() throws ActivityInterpreterException {
         Type type = null;
@@ -41,6 +46,11 @@ public class ActivityInterpreter {
                     }
                     continueInterpretingLesson(line);
                     break;
+                case QUIZ:
+                    if (activity == null){
+                        activity = new QuizActivity();
+                    }
+                    continueInterpretingQuiz(line);
             }
         }
         container.addElement(activity);
@@ -61,18 +71,56 @@ public class ActivityInterpreter {
                     ((LessonActivity) activity).gotoNxt = line.replace(Constants.KEYWORD_REC_GOTO, "");
                     return;
                 }
-                if (line.trim().equals("LESSON START")) {
+                if (line.trim().equals(KEYWORD_LESSON_START)) {
                     mode = Mode.INTRP_LESSONCONTENT;
                     return;
                 }
                 return;
             case INTRP_LESSONCONTENT:
-                if (line.trim().equals("LESSON END")) {
+                if (line.trim().equals(KEYWORD_LESSON_END)) {
+                    if (((LessonActivity) activity).sections.isEmpty()) {
+                        mode = Mode.ERR;
+                        return;
+                    }
                     mode = Mode.NORMAL;
                     return;
                 }
                 if (line.startsWith(">")) {
                     ((LessonActivity) activity).sections.add(line.replaceFirst(">", ""));
+                }
+        }
+    }
+
+    private void continueInterpretingQuiz(String line) {
+        switch (mode) {
+            case NORMAL:
+                if (line.startsWith(Constants.KEYWORD_NAME)) {
+                    activity.setActivityName(line.replace(Constants.KEYWORD_NAME, ""));
+                    return;
+                }
+                if (line.trim().equals(KEYWORD_QUESTION_START)) {
+                    mode = Mode.INTRP_QUIZQUESTION;
+                    tmpQuestion = new MultipleChoiceQuestion();
+                    return;
+                }
+                return;
+            case INTRP_QUIZQUESTION:
+                if (line.trim().equals(KEYWORD_QUESTION_END)) {
+                    if (!((QuizActivity) activity).isPopulated()) {
+
+                    }
+                    mode = Mode.NORMAL;
+                    ((QuizActivity) activity).multipleChoiceQuestions.add(tmpQuestion);
+                    return;
+                }
+                if (line.startsWith(KEYWORD_QUESTION)) {
+                    tmpQuestion.setQuestion(line.replace(KEYWORD_QUESTION, ""));
+                }
+                if (line.startsWith(KEYWORD_INCORRECTANS)) {
+                    MultipleChoiceAnswer ians = new MultipleChoiceAnswer();
+                    ians.setAnswer(line.replace(KEYWORD_INCORRECTANS, ""));
+                    ians.setCorrect(false);
+                    tmpQuestion.addResponse(ians);
                 }
         }
     }
@@ -86,8 +134,13 @@ class ActivityInterpreterException extends Error {
 }
 
 class ErroredInterpreterException extends ActivityInterpreterException {
-
     public ErroredInterpreterException(String s) {
+        super(s);
+    }
+}
+
+class EmptyQuestionException extends ActivityInterpreterException {
+    public EmptyQuestionException(String s) {
         super(s);
     }
 }

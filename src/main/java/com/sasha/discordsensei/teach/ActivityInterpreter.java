@@ -18,7 +18,7 @@ public class ActivityInterpreter {
     public void interpret() throws ActivityInterpreterException {
         Type type = null;
         for (int i = 0; i < fileLines.length; i++) {
-            if (mode == Mode.ERR) throw new ErroredInterpreter("Interpreter was switched to Errored mode!");
+            if (mode == Mode.ERR) throw new ErroredInterpreterException("Interpreter was switched to Errored mode!");
             String line = fileLines[i];
             if (i == 0 && !line.startsWith(KEYWORD_FILETYPE)) {
                 throw new FileTypeNotDeclaredException("\"FILETYPE\" must be declared at the top of the document!");
@@ -70,7 +70,7 @@ public class ActivityInterpreter {
                     mode = Mode.NORMAL;
                     return;
                 }
-                
+
         }
     }
 
@@ -80,9 +80,9 @@ class ActivityInterpreterException extends Error {
         super(s);
     }
 }
-class ErroredInterpreter extends ActivityInterpreterException {
+class ErroredInterpreterException extends ActivityInterpreterException {
 
-    public ErroredInterpreter(String s) {
+    public ErroredInterpreterException(String s) {
         super(s);
     }
 }

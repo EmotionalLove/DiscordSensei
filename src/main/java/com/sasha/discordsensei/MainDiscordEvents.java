@@ -15,6 +15,7 @@ public class MainDiscordEvents {
     public void onMsgRx(GuildMessageReceivedEvent e) {
         if (e.getAuthor().isBot()) return;
         if (e.getMessage().getContentDisplay().startsWith(";")) {
+            commandContextChannel = e.getChannel();
             Main.processor.processCommand(e.getMessage().getContentDisplay());
         }
     }

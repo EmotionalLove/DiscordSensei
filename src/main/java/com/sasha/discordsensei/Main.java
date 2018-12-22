@@ -30,6 +30,7 @@ public class Main {
         processor.register(LoadedPacksCommand.class);
         TeachPackLoader loader = new TeachPackLoader();
         loader.discoverPacks(config.teachingpacksDir);
+        loader.loadPacks();
         discordInstance = new JDABuilder(config.discordToken).build();
         discordInstance.setEventManager(new AnnotatedEventManager());
         discordInstance.addEventListener(new MainDiscordEvents());

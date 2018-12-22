@@ -1,9 +1,12 @@
 package com.sasha.discordsensei.loader;
 
+import com.sasha.discordsensei.Main;
+import com.sasha.discordsensei.interpreter.ActivityInterpreter;
+import com.sasha.discordsensei.teach.TeacherActivityContainer;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -28,6 +31,50 @@ public class TeachPackLoader {
             }
         }
     }
+    
+    public void loadPacks() {
+        File dir = new File("tmp_" + Main.config.teachingpacksDir);
+        if (!dir.exists()) return;
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                System.out.println("Reading " + file.getName());
+                File f = new File(file, "info.tpk");
+                if (!f.exists()) continue;
+                String[] info;
+                try {
+                    info = readInfo(f);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                TeacherActivityContainer container = new TeacherActivityContainer(info[0], info[1]);
+                for (File listFile : file.listFiles()) {
+                    if (listFile.isDirectory() || !listFile.getName().endsWith(".txt")) {
+                        continue;
+                    }
+                    try {
+                        ArrayList<String> lines = new ArrayList<>();
+                        String l;
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(listFile)));
+                        while ((l = reader.readLine()) != null) {
+                            lines.add(l);
+                        }
+                        new ActivityInterpreter(lines, container).interpret();
+                    }catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                Main.loadedContainers.add(container);
+            }
+        }
+    }
+
+    public String[] readInfo(File file) throws IOException {
+        FileInputStream stream = new FileInputStream(file);
+        InputStreamReader reader = new InputStreamReader(stream);
+        BufferedReader buff = new BufferedReader(reader);
+        return buff.readLine().split(":");
+    }
 
     private void unzip(File zip, File extdir) throws IOException {
         byte[] buff = new byte[1024];
@@ -48,6 +95,7 @@ public class TeachPackLoader {
             fos.close();
             zipStream.closeEntry();
         }
+        zipStream.closeEntry();
         zipStream.close();
         stream.close();
     }

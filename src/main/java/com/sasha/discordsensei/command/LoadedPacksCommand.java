@@ -1,5 +1,8 @@
 package com.sasha.discordsensei.command;
 
+import com.sasha.discordsensei.Main;
+import com.sasha.discordsensei.MainDiscordEvents;
+import com.sasha.discordsensei.teach.TeacherActivityContainer;
 import com.sasha.simplecmdsys.SimpleCommand;
 
 /**
@@ -13,6 +16,10 @@ public class LoadedPacksCommand extends SimpleCommand {
 
     @Override
     public void onCommand() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("Packs:\n");
+        for (TeacherActivityContainer loadedContainer : Main.loadedContainers) {
+            builder.append(loadedContainer.getName() + "\n");
+        }
+        MainDiscordEvents.commandContextChannel.sendMessage(builder.toString()).submit();
     }
 }

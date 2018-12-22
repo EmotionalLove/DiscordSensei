@@ -8,6 +8,8 @@ import com.sasha.discordsensei.teach.impl.QuizActivity;
 import com.sasha.discordsensei.teach.impl.util.MultipleChoiceAnswer;
 import com.sasha.discordsensei.teach.impl.util.MultipleChoiceQuestion;
 
+import java.util.ArrayList;
+
 import static com.sasha.discordsensei.Constants.*;
 
 /**
@@ -16,17 +18,22 @@ import static com.sasha.discordsensei.Constants.*;
 public class ActivityInterpreter {
 
     private Mode mode = Mode.SETUP;
-    private String[] fileLines;
+    private ArrayList<String> fileLines;
     private TeacherActivityContainer container;
     private TeacherActivity activity = null;
 
     private MultipleChoiceQuestion tmpQuestion = null;
 
+    public ActivityInterpreter(ArrayList<String> lines, TeacherActivityContainer container) {
+        this.container = container;
+        fileLines = lines;
+    }
+
     public void interpret() throws ActivityInterpreterException {
         Type type = null;
-        for (int i = 0; i < fileLines.length; i++) {
+        for (int i = 0; i < fileLines.size(); i++) {
             if (mode == Mode.ERR) throw new ErroredInterpreterException("Interpreter was switched to Errored mode!");
-            String line = fileLines[i];
+            String line = fileLines.get(i);
             if (i == 0 && !line.startsWith(KEYWORD_FILETYPE)) {
                 throw new FileTypeNotDeclaredException("\"FILETYPE\" must be declared at the top of the document!");
             } else if (i == 0) {

@@ -14,7 +14,20 @@ public class TeacherActivityContainer {
 
     private String name;
     private String author;
-    private ArrayList<TeacherActivity> elements;
+    private ArrayList<TeacherActivity> elements = new ArrayList<>();
+
+    public TeacherActivityContainer(String name, String author) {
+        this.name = name;
+        this.author = author;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
 
     public void addElement(TeacherActivity element) {
         this.elements.add(element);

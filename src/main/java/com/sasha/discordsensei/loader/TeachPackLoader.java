@@ -1,6 +1,7 @@
 package com.sasha.discordsensei.loader;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -14,6 +15,7 @@ public class TeachPackLoader {
     public void discoverPacks(String dir) throws IOException {
         File dirf = new File(dir);
         File tmp = new File("tmp_" + dir);
+        Runtime.getRuntime().addShutdownHook(new Thread(tmp::delete));
         if (dirf.exists()) {
             dirf.delete();
         }
@@ -22,6 +24,7 @@ public class TeachPackLoader {
             if (file.isDirectory()) continue;
             if (file.getName().endsWith(".zip")) {
                 unzip(file, tmp);
+                System.out.println("Discovered " + file.getName());
             }
         }
     }

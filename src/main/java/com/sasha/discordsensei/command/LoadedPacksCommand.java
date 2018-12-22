@@ -1,6 +1,5 @@
 package com.sasha.discordsensei.command;
 
-import com.sasha.discordsensei.MainDiscordEvents;
 import com.sasha.simplecmdsys.SimpleCommand;
 
 /**

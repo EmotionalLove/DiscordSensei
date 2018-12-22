@@ -8,10 +8,8 @@ package com.sasha.discordsensei.teach;
 public abstract class TeacherActivity {
 
     private String activityName;
-    protected long channelId;
-    protected long userId;
 
-    public abstract void start();
+    public abstract void start(Student student);
 
     @Override
     public String toString() {

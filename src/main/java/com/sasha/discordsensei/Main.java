@@ -1,5 +1,6 @@
 package com.sasha.discordsensei;
 
+import com.sasha.discordsensei.command.LessonCommand;
 import com.sasha.discordsensei.command.LoadedPacksCommand;
 import com.sasha.discordsensei.loader.TeachPackLoader;
 import com.sasha.discordsensei.teach.TeacherActivityContainer;
@@ -28,6 +29,7 @@ public class Main {
     public static void main(String[] args) throws LoginException, InstantiationException, IllegalAccessException, IOException {
         new SettingHandler("config.yml").read(config);
         processor.register(LoadedPacksCommand.class);
+        processor.register(LessonCommand.class);
         TeachPackLoader loader = new TeachPackLoader();
         loader.discoverPacks(config.teachingpacksDir);
         loader.loadPacks();

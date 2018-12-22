@@ -1,6 +1,9 @@
 package com.sasha.discordsensei.teach.impl;
 
+import com.sasha.discordsensei.Main;
+import com.sasha.discordsensei.teach.Student;
 import com.sasha.discordsensei.teach.TeacherActivity;
+import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.util.ArrayList;
 
@@ -14,7 +17,14 @@ public class LessonActivity extends TeacherActivity {
     public String gotoNxt;
 
     @Override
-    public void start() {
-
+    public void start(Student student) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setTitle(this.getActivityName());
+        StringBuilder builder1 = new StringBuilder();
+        for (String section : sections) {
+            builder1.append("\n\n").append(section);
+        }
+        builder.setDescription("**Objective** > " + objective + builder1.toString() + ((gotoNxt != null) ? "**Also try** > " + gotoNxt : ""));
+        student.getChannel(Main.discordInstance).sendMessage(builder.build()).submit();
     }
 }

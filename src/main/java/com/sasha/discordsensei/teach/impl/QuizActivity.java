@@ -1,5 +1,6 @@
 package com.sasha.discordsensei.teach.impl;
 
+        import com.sasha.discordsensei.teach.Student;
         import com.sasha.discordsensei.teach.TeacherActivity;
         import com.sasha.discordsensei.teach.impl.util.MultipleChoiceAnswer;
         import com.sasha.discordsensei.teach.impl.util.MultipleChoiceQuestion;
@@ -17,7 +18,7 @@ public class QuizActivity extends TeacherActivity {
     public List<ShortResponseQuestion> shortResponseQuestions = new ArrayList<>();
 
     @Override
-    public void start() {
+    public void start(Student student) {
 
     }
 

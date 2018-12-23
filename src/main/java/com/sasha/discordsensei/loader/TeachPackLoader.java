@@ -31,7 +31,7 @@ public class TeachPackLoader {
             }
         }
     }
-    
+
     public void loadPacks() {
         File dir = new File("tmp_" + Main.config.teachingpacksDir);
         if (!dir.exists()) return;
@@ -60,7 +60,7 @@ public class TeachPackLoader {
                             lines.add(l);
                         }
                         new ActivityInterpreter(lines, container).interpret();
-                    }catch (IOException ex) {
+                    } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 }

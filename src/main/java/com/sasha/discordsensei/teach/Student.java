@@ -1,7 +1,6 @@
 package com.sasha.discordsensei.teach;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;

@@ -36,22 +36,23 @@ public class TeacherActivityContainer {
     public LessonActivity getLessonByName(String s) {
         List<TeacherActivity> activities = elements
                 .stream()
-                .filter(e->e instanceof LessonActivity)
+                .filter(e -> e instanceof LessonActivity)
                 .collect(Collectors.toList());
         for (TeacherActivity activity : activities) {
-            if  (activity.getActivityName().equalsIgnoreCase(s)) {
+            if (activity.getActivityName().equalsIgnoreCase(s)) {
                 return (LessonActivity) activity;
             }
         }
         return null;
     }
+
     public QuizActivity getQuizByName(String s) {
         List<TeacherActivity> activities = elements
                 .stream()
-                .filter(e->e instanceof QuizActivity)
+                .filter(e -> e instanceof QuizActivity)
                 .collect(Collectors.toList());
         for (TeacherActivity activity : activities) {
-            if  (activity.getActivityName().equalsIgnoreCase(s)) {
+            if (activity.getActivityName().equalsIgnoreCase(s)) {
                 return (QuizActivity) activity;
             }
         }

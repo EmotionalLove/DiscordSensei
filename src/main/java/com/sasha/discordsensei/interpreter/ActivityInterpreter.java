@@ -54,7 +54,7 @@ public class ActivityInterpreter {
                     continueInterpretingLesson(line);
                     break;
                 case QUIZ:
-                    if (activity == null){
+                    if (activity == null) {
                         activity = new QuizActivity();
                     }
                     continueInterpretingQuiz(line);
@@ -154,6 +154,7 @@ class EmptyQuestionException extends ActivityInterpreterException {
         super(s);
     }
 }
+
 class ImpossibleQuestionException extends ActivityInterpreterException {
     public ImpossibleQuestionException(String s) {
         super(s);
